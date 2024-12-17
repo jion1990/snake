@@ -14,6 +14,22 @@ let dy = 0;
 let score = 0;
 let gameLoop = null;
 let gameSpeed = 100;
+let touchStartX = null;
+let touchStartY = null;
+
+// تحديث حجم Canvas ليناسب الشاشة
+function resizeCanvas() {
+    const container = document.querySelector('.game-container');
+    const containerWidth = container.clientWidth;
+    const scale = containerWidth / canvas.width;
+    
+    canvas.style.width = containerWidth + 'px';
+    canvas.style.height = (canvas.height * scale) + 'px';
+}
+
+// استدعاء دالة تغيير الحجم عند تحميل الصفحة وتغيير حجم النافذة
+window.addEventListener('load', resizeCanvas);
+window.addEventListener('resize', resizeCanvas);
 
 function initGame() {
     snake = [
@@ -122,4 +138,63 @@ document.addEventListener('keydown', (event) => {
             if (dx === 0) { dx = 1; dy = 0; }
             break;
     }
+});
+
+// إضافة مستمعي الأحداث لأزرار التحكم
+document.getElementById('upButton').addEventListener('click', () => {
+    if (dy === 0) { dx = 0; dy = -1; }
+});
+
+document.getElementById('downButton').addEventListener('click', () => {
+    if (dy === 0) { dx = 0; dy = 1; }
+});
+
+document.getElementById('leftButton').addEventListener('click', () => {
+    if (dx === 0) { dx = -1; dy = 0; }
+});
+
+document.getElementById('rightButton').addEventListener('click', () => {
+    if (dx === 0) { dx = 1; dy = 0; }
+});
+
+// إضافة دعم اللمس للأجهزة المحمولة
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+});
+
+canvas.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    if (!touchStartX || !touchStartY) return;
+
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+    
+    // تحديد الاتجاه بناءً على حركة اللمس
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // حركة أفقية
+        if (deltaX > 0 && dx === 0) {
+            dx = 1;
+            dy = 0;
+        } else if (deltaX < 0 && dx === 0) {
+            dx = -1;
+            dy = 0;
+        }
+    } else {
+        // حركة رأسية
+        if (deltaY > 0 && dy === 0) {
+            dx = 0;
+            dy = 1;
+        } else if (deltaY < 0 && dy === 0) {
+            dx = 0;
+            dy = -1;
+        }
+    }
+    
+    touchStartX = null;
+    touchStartY = null;
 });

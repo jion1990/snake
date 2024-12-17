@@ -10,8 +10,16 @@
         <div class="score">النتيجة: <span id="score">0</span></div>
         <canvas id="gameCanvas" width="800" height="600"></canvas>
         <div class="controls">
-            <p>استخدم مفاتيح الأسهم للتحكم في الثعبان</p>
+            <p>استخدم مفاتيح الأسهم أو الأزرار للتحكم في الثعبان</p>
             <button id="startButton">ابدأ اللعبة</button>
+            <div class="control-buttons">
+                <button class="control-btn up" id="upButton">⬆️</button>
+                <div class="horizontal-buttons">
+                    <button class="control-btn left" id="leftButton">⬅️</button>
+                    <button class="control-btn right" id="rightButton">➡️</button>
+                </div>
+                <button class="control-btn down" id="downButton">⬇️</button>
+            </div>
         </div>
     </div>
     <script src="game.js"></script>
